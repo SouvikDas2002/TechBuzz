@@ -1,0 +1,7 @@
+#dependency
+node_modules/
+
+#sensitive information
+.env
+.env.local
+.env.*.local
