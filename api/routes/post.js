@@ -1,77 +1,63 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const User = require("../models/user");
 const Post = require("../models/post");
 
-//CREATE post
-
-router.post("/:id", async (req, res) => {
+//CREATE POST
+router.post("/", async (req, res) => {
+  const newPost = new Post(req.body);
   try {
-    const user = await User.findById(req.params.id);
-    if (user.username === req.body.username) {
-      const newPost = new Post(req.body);
-      try {
-        const savePost = await newPost.save();
-        res.status(200).json(savePost);
-      } catch (err) {
-        res.status(500).json(err);
-      }
-    } else {
-      res.status(500).json("You can only post with ur account name");
-    }
+    const savedPost = await newPost.save();
+    res.status(200).json(savedPost);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-//UPDATE Post
-
+//UPDATE POST
 router.put("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.username == req.body.username) {
+    if (post.username === req.body.username) {
       try {
-        const updatePost = await Post.findByIdAndUpdate(
+        const updatedPost = await Post.findByIdAndUpdate(
           req.params.id,
           {
             $set: req.body,
           },
           { new: true }
         );
-        res.status(200).json(updatePost);
+        res.status(200).json(updatedPost);
       } catch (err) {
         res.status(500).json(err);
       }
     } else {
-      res.status(401).json("You can update on;y your post");
+      res.status(401).json("You can update only your post!");
     }
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-//DELETE post
-
+//DELETE POST
 router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.username == req.body.username) {
+    if (post.username === req.body.username) {
       try {
-        await post.deleteOne();
-        res.status(200).json("post has been deleted");
+        await post.delete();
+        res.status(200).json("Post has been deleted...");
       } catch (err) {
         res.status(500).json(err);
       }
     } else {
-      res.status(401).json("You can delete your own post");
+      res.status(401).json("You can delete only your post!");
     }
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// GET POSts
-
+//GET POST
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -81,19 +67,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//GET all Posts
-
+//GET ALL POSTS
 router.get("/", async (req, res) => {
   const username = req.query.user;
-  const catname = req.query.cat;
+  const catName = req.query.cat;
   try {
     let posts;
     if (username) {
       posts = await Post.find({ username });
-    } else if (catname) {
+    } else if (catName) {
       posts = await Post.find({
         categories: {
-          $in: [catname],
+          $in: [catName],
         },
       });
     } else {

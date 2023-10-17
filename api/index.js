@@ -7,9 +7,11 @@ const userRoute = require("./routes/users");
 const postRoute = require("./routes/post");
 const categoryRoute = require("./routes/categories");
 const multer=require('multer');
+const path=require("path");
 
 dotenv.config();
 app.use(express.json());
+app.use("/images",express.static(path.join(__dirname,"/images")))
 
 //mongodb connection
 
@@ -28,7 +30,8 @@ mongoose
         cb(null,'images');
     },
     filename:(req,file,cb)=>{
-        cb(null,Date.now()+'-'+file.originalname);
+        // cb(null,Date.now()+'-'+file.originalname);
+        cb(null, req.body.name);
     }
   })
   const upload=multer({storage:storage});
