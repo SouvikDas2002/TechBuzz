@@ -7,12 +7,14 @@ export default function Post({post}) {
   return (
     <div className="post">
 
+      <Link to={`/post/${post._id}`} className='link'>
       {post.photo &&(
         <img className='postImg'
             src={PF+post.photo}
             alt=""
         />
       )}
+        </Link>
         <div className="postInfo">
             <div className="postCats">
               {post.categories.map((c)=>(

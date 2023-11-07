@@ -28,7 +28,6 @@ export default function Write() {
       }catch(err){ }
     }
     try{
-
       const res=await axios.post("/posts",newPost);
       window.location.replace("/post/"+res.data._id);
       console.log(res);

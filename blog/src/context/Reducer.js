@@ -18,6 +18,23 @@ const Reducer=(state,action)=>{
                 isFetching:false,
                 error:true
             };
+        case "Update_start":
+            return{
+                ...state,
+                isFetching:true
+            };
+        case "Update_Success":
+            return{
+                user:action.payload,
+                isFetching:false,
+                error:false
+            };
+        case "Update_failure":
+            return{
+                user:state.user,
+                isFetching:false,
+                error:true
+            };
         case "Logout":
             return{
                 user:null,
